@@ -9,6 +9,12 @@
 
   <h1>📋 Control de Asistencia</h1>
 
+  <!-- FECHA -->
+  <div class="fecha-container">
+    <label>📅 Fecha de asistencia:</label>
+    <input type="date" id="fecha">
+  </div>
+
   <!-- ESCANER -->
   <div id="reader"></div>
 
@@ -22,14 +28,17 @@
         <th>Nombre</th>
         <th>Correo</th>
         <th>Programa</th>
-        <th>Asistencia</th>
+        <th>Asistencia (doble click para borrar)</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
-  <!-- BOTON -->
-  <button onclick="exportar()">📊 Exportar Excel</button>
+  <!-- BOTONES -->
+  <div class="botones">
+    <button onclick="exportar()">📊 Exportar Excel</button>
+    <button onclick="eliminarPorFecha()">🗑 Eliminar por fecha</button>
+  </div>
 
   <!-- LIBRERIAS -->
   <script src="https://unpkg.com/html5-qrcode"></script>
