@@ -1,5 +1,5 @@
 // =======================
-// BASE DE DATOS (EDITAS AQUÍ)
+// BASE DE DATOS
 // =======================
 
 const estudiantes = {
@@ -10,13 +10,13 @@ const estudiantes = {
 };
 
 // =======================
-// ASISTENCIA GLOBAL
+// ASISTENCIA POR FECHA
 // =======================
 
-// Guardar asistencia por estudiante, sin importar fecha
-let asistenciaGlobal = JSON.parse(localStorage.getItem("asistenciaGlobal") || "{}");
+// Guarda asistencia por fecha
+let asistenciaPorFecha = JSON.parse(localStorage.getItem("asistenciaPorFecha") || "{}");
 
-// Fecha activa (solo para registro del QR)
+// Fecha activa
 let fechaActiva = new Date().toISOString().split("T")[0];
 document.getElementById("fecha").value = fechaActiva;
 
@@ -26,14 +26,18 @@ document.getElementById("fecha").value = fechaActiva;
 
 document.getElementById("fecha").addEventListener("change", (e) => {
   fechaActiva = e.target.value;
+  actualizarTabla();
 });
 
-// Agregar fecha (registrar asistencia si no existe)
 function agregarFecha() {
   if (!fechaActiva) return alert("Selecciona una fecha");
-  // No hacemos nada especial por ahora; la tabla se actualizará automáticamente
+
+  // Crear registro de la nueva fecha si no existe
+  if (!asistenciaPorFecha[fechaActiva]) asistenciaPorFecha[fechaActiva] = {};
+
+  guardarAsistencia();
   actualizarTabla();
-  alert(`Fecha ${fechaActiva} lista para registrar asistencia`);
+  alert(`📅 Nueva fecha ${fechaActiva} lista para registrar asistencia`);
 }
 
 // =======================
@@ -45,7 +49,7 @@ function actualizarTabla() {
   tbody.innerHTML = "";
 
   for (let id in estudiantes) {
-    const asistio = asistenciaGlobal[id] || false;
+    const asistio = asistenciaPorFecha[fechaActiva]?.[id] || false;
 
     let fila = document.createElement("tr");
     fila.setAttribute("data-id", id);
@@ -74,14 +78,16 @@ function onScanSuccess(decodedText) {
   const id = decodedText.trim();
 
   if (!estudiantes[id]) { alert("❌ ID no válido"); return; }
+  if (!fechaActiva) { alert("Selecciona una fecha"); return; }
 
-  asistenciaGlobal[id] = true;
+  if (!asistenciaPorFecha[fechaActiva]) asistenciaPorFecha[fechaActiva] = {};
+
+  asistenciaPorFecha[fechaActiva][id] = true;
   guardarAsistencia();
   actualizarTabla();
   alert("✅ Asistencia registrada");
 }
 
-// Inicializar scanner
 let scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
 scanner.render(onScanSuccess);
 
@@ -90,8 +96,10 @@ scanner.render(onScanSuccess);
 // =======================
 
 function toggleAsistencia(id, celda) {
-  const asistio = asistenciaGlobal[id] || false;
-  asistenciaGlobal[id] = !asistio;
+  if (!asistenciaPorFecha[fechaActiva]) asistenciaPorFecha[fechaActiva] = {};
+
+  const asistio = asistenciaPorFecha[fechaActiva][id] || false;
+  asistenciaPorFecha[fechaActiva][id] = !asistio;
 
   guardarAsistencia();
   actualizarTabla();
@@ -105,10 +113,10 @@ function eliminarTodas() {
   const confirmacion = confirm("⚠️ ¿Seguro que quieres eliminar toda la asistencia?");
   if (!confirmacion) return;
 
-  asistenciaGlobal = {};
+  asistenciaPorFecha = {};
   guardarAsistencia();
   actualizarTabla();
-  alert("🗑 Asistencia eliminada");
+  alert("🗑 Toda la asistencia ha sido eliminada");
 }
 
 // =======================
@@ -119,13 +127,14 @@ function exportar() {
   const data = [];
 
   for (let id in estudiantes) {
-    const asistio = asistenciaGlobal[id] ? "Asistió" : "No asistió";
+    // Revisar todas las fechas y marcar "Asistió" si al menos en una fecha hay true
+    let asistio = Object.values(asistenciaPorFecha).some(fecha => fecha[id]);
     data.push({
       ID: id,
       Nombre: estudiantes[id].nombre,
       Correo: estudiantes[id].correo,
       Programa: estudiantes[id].programa,
-      Asistencia: asistio
+      Asistencia: asistio ? "Asistió" : "No asistió"
     });
   }
 
@@ -140,7 +149,7 @@ function exportar() {
 // =======================
 
 function guardarAsistencia() {
-  localStorage.setItem("asistenciaGlobal", JSON.stringify(asistenciaGlobal));
+  localStorage.setItem("asistenciaPorFecha", JSON.stringify(asistenciaPorFecha));
 }
 
 // =======================
