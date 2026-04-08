@@ -4,7 +4,7 @@
 
 const estudiantes = {
   "0000285118": { nombre: "Juan Pérez", correo: "juan@example.com", programa: "Ing. Civil" },
-  "0000391700": { nombre: "Ana Gómez", correo: "ana@example.com", programa: "Ing. Sistemas" },
+  "000039170pro0": { nombre: "Ana Gómez", correo: "ana@example.com", programa: "Ing. Sistemas" },
   "0000379578": { nombre: "Luis Ramírez", correo: "luis@example.com", programa: "Arquitectura" },
   "E00000000039637060F141": { nombre: "Nuevo Estudiante", correo: "", programa: "" }
 };
