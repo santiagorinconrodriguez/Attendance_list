@@ -9,8 +9,10 @@ let estudiantes = {
   "E00000000039637060F141": { nombre: "Nuevo Estudiante", correo: "", programa: "" }
 };
 
-let asistenciaPorFecha = {}; // { "2-48-1999": { "0000285118": "Asistió", ... } }
+// Historial de asistencia por fecha
+let asistenciaPorFecha = {}; // { "2026-04-08": { "0000285118": "Asistió", ... } }
 
+// Fecha activa
 let fechaActiva = new Date().toISOString().split("T")[0];
 document.getElementById("fecha").value = fechaActiva;
 
@@ -23,11 +25,34 @@ document.getElementById("fecha").addEventListener("change", e => {
   actualizarTabla();
 });
 
-function agregarFecha() {
-  if (!fechaActiva) return alert("Selecciona una fecha");
-  if (!asistenciaPorFecha[fechaActiva]) asistenciaPorFecha[fechaActiva] = {};
+// Cambiar la fecha y reiniciar asistencias visuales para esa fecha
+function modificarFecha() {
+  const nuevaFecha = prompt("Ingrese la nueva fecha (YYYY-MM-DD):", fechaActiva);
+  if (!nuevaFecha) return;
+
+  const confirmacion = confirm(`⚠️ ¿Desea cambiar la fecha activa de ${fechaActiva} a ${nuevaFecha}?`);
+  if (!confirmacion) return;
+
+  fechaActiva = nuevaFecha;
+  document.getElementById("fecha").value = fechaActiva;
+
+  if (!asistenciaPorFecha[fechaActiva]) {
+    asistenciaPorFecha[fechaActiva] = {};
+  }
+
   actualizarTabla();
-  alert(`📅 Nueva fecha ${fechaActiva} lista para registrar asistencia`);
+  alert(`📅 Fecha activa cambiada a ${fechaActiva}`);
+}
+// Borrar todas las asistencias de la fecha activa
+function borrarDatosFecha() {
+  if (!fechaActiva) return alert("Selecciona una fecha");
+
+  const confirmacion = confirm(`⚠️ ¿Desea borrar TODAS las asistencias de ${fechaActiva}?`);
+  if (!confirmacion) return;
+
+  asistenciaPorFecha[fechaActiva] = {};
+  actualizarTabla();
+  alert("🗑 Todas las asistencias de esta fecha han sido borradas");
 }
 
 // =======================
@@ -90,7 +115,7 @@ function toggleAsistencia(id, celda) {
 }
 
 // =======================
-// EXPORTAR / GUARDAR EXCEL
+// EXPORTAR EXCEL
 // =======================
 
 function exportar() {
@@ -118,56 +143,6 @@ function exportar() {
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Asistencia");
   XLSX.writeFile(wb, "asistencia_global.xlsx");
-}
-
-// =======================
-// SUBIR EXCEL EXISTENTE
-// =======================
-
-document.getElementById("fileInput").addEventListener("change", e => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = e => {
-    const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: "array" });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const json = XLSX.utils.sheet_to_json(sheet);
-
-    // No reiniciamos estudiantes, solo actualizamos/añadimos
-    json.forEach(row => {
-      const id = row.ID;
-      if (!id) return;
-
-      // Actualizar datos o agregar nuevos
-      estudiantes[id] = { 
-        nombre: row.Nombre || estudiantes[id]?.nombre || "",
-        correo: row.Correo || estudiantes[id]?.correo || "",
-        programa: row.Programa || estudiantes[id]?.programa || ""
-      };
-
-      // Actualizar asistencias por fecha
-      Object.keys(row).forEach(key => {
-        if (["ID","Nombre","Correo","Programa"].includes(key)) return;
-        if (!asistenciaPorFecha[key]) asistenciaPorFecha[key] = {};
-        asistenciaPorFecha[key][id] = row[key] || "No asistió";
-      });
-    });
-
-    actualizarTabla();
-    alert("📂 Base de datos cargada correctamente");
-  };
-  reader.readAsArrayBuffer(file);
-});
-
-// =======================
-// GUARDAR EXCEL DESDE INTERFAZ
-// =======================
-
-function guardarExcel() {
-  exportar();
-  alert("💾 Base de datos guardada en Excel");
 }
 
 // =======================
