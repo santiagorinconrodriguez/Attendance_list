@@ -25,7 +25,7 @@ document.getElementById("fecha").addEventListener("change", e => {
   actualizarTabla();
 });
 
-// Cambiar la fecha y reiniciar asistencias visuales para esa fecha
+// Cambiar la fecha activa (con confirmación)
 function modificarFecha() {
   const nuevaFecha = prompt("Ingrese la nueva fecha (YYYY-MM-DD):", fechaActiva);
   if (!nuevaFecha) return;
@@ -43,7 +43,8 @@ function modificarFecha() {
   actualizarTabla();
   alert(`📅 Fecha activa cambiada a ${fechaActiva}`);
 }
-// Borrar todas las asistencias de la fecha activa
+
+// Borrar todas las asistencias de la fecha activa (con confirmación)
 function borrarDatosFecha() {
   if (!fechaActiva) return alert("Selecciona una fecha");
 
