@@ -3,67 +3,48 @@
 // =======================
 
 const estudiantes = {
-  "0000285118": { nombre: "", correo: "", programa: "" },
-  "0000391700": { nombre: "", correo: "", programa: "" },
-  "0000379578": { nombre: "", correo: "", programa: "" },
-  "0000313245": { nombre: "", correo: "", programa: "" },
-  "0000299883": { nombre: "", correo: "", programa: "" },
-  "0000301314": { nombre: "", correo: "", programa: "" },
-  "0000382590": { nombre: "", correo: "", programa: "" },
-  "0000390898": { nombre: "", correo: "", programa: "" },
-  "0000297534": { nombre: "", correo: "", programa: "" },
-  "0000372729": { nombre: "", correo: "", programa: "" },
-  "0000382237": { nombre: "", correo: "", programa: "" },
-  "0000380766": { nombre: "", correo: "", programa: "" },
-  "0000335534": { nombre: "", correo: "", programa: "" },
-  "0000382796": { nombre: "", correo: "", programa: "" },
-  "0000296078": { nombre: "", correo: "", programa: "" },
-  "0000276801": { nombre: "", correo: "", programa: "" },
-  "0000368812": { nombre: "", correo: "", programa: "" },
-  "0000202262": { nombre: "", correo: "", programa: "" },
-  "0000381633": { nombre: "", correo: "", programa: "" },
-  "0000274134": { nombre: "", correo: "", programa: "" },
-  "0000260232": { nombre: "", correo: "", programa: "" },
-  "0000368335": { nombre: "", correo: "", programa: "" },
-  "0000392314": { nombre: "", correo: "", programa: "" },
-  "0000377835": { nombre: "", correo: "", programa: "" },
-  "0000372548": { nombre: "", correo: "", programa: "" },
-  "0000367634": { nombre: "", correo: "", programa: "" },
-  "0000386400": { nombre: "", correo: "", programa: "" },
-  "0000292311": { nombre: "", correo: "", programa: "" },
-  "0000260842": { nombre: "", correo: "", programa: "" },
-  "0000390484": { nombre: "", correo: "", programa: "" },
-  "0000389498": { nombre: "", correo: "", programa: "" },
-  "0000286011": { nombre: "", correo: "", programa: "" },
-  "0000366323": { nombre: "", correo: "", programa: "" },
-  "0000290074": { nombre: "", correo: "", programa: "" },
-  "0000305116": { nombre: "", correo: "", programa: "" },
-  "0000299884": { nombre: "", correo: "", programa: "" },
-  "0000308084": { nombre: "", correo: "", programa: "" },
-  "0000387982": { nombre: "", correo: "", programa: "" },
-  "0000389382": { nombre: "", correo: "", programa: "" },
-  "0000372159": { nombre: "", correo: "", programa: "" },
-  "0000361203": { nombre: "", correo: "", programa: "" },
-
-  // NUEVO ID
-  "E00000000039637060F141": { nombre: "", correo: "", programa: "" }
+  "0000285118": { nombre: "Juan Pérez", correo: "juan@example.com", programa: "Ing. Civil" },
+  "0000391700": { nombre: "Ana Gómez", correo: "ana@example.com", programa: "Ing. Sistemas" },
+  "0000379578": { nombre: "Luis Ramírez", correo: "luis@example.com", programa: "Arquitectura" },
+  // agrega más estudiantes según tu necesidad
+  "E00000000039637060F141": { nombre: "Nuevo Estudiante", correo: "", programa: "" }
 };
 
 // =======================
-// ASISTENCIA
+// FECHAS Y ASISTENCIA
 // =======================
 
-let asistencia = [];
+let asistenciaPorFecha = JSON.parse(localStorage.getItem("asistenciaPorFecha") || "{}");
+let fechaActiva = new Date().toISOString().split("T")[0];
+
+document.getElementById("fecha").value = fechaActiva;
 
 // =======================
-// CREAR TABLA
+// FUNCIONES FECHA
 // =======================
 
-function crearTabla() {
+document.getElementById("fecha").addEventListener("change", (e) => {
+  fechaActiva = e.target.value;
+  actualizarTabla();
+});
 
-  let tbody = document.querySelector("#tabla tbody");
+function agregarFecha() {
+  if (!fechaActiva) return alert("Selecciona una fecha primero");
+  if (!asistenciaPorFecha[fechaActiva]) asistenciaPorFecha[fechaActiva] = {};
+  guardarAsistencia();
+  actualizarTabla();
+}
+
+// =======================
+// ACTUALIZAR TABLA
+// =======================
+
+function actualizarTabla() {
+  const tbody = document.querySelector("#tabla tbody");
+  tbody.innerHTML = "";
 
   for (let id in estudiantes) {
+    const asistio = asistenciaPorFecha[fechaActiva]?.[id] || false;
 
     let fila = document.createElement("tr");
     fila.setAttribute("data-id", id);
@@ -73,59 +54,37 @@ function crearTabla() {
       <td>${estudiantes[id].nombre}</td>
       <td>${estudiantes[id].correo}</td>
       <td>${estudiantes[id].programa}</td>
-      <td class="estado" ondblclick="eliminarAsistencia('${id}', this)">❌</td>
+      <td class="estado" ondblclick="toggleAsistencia('${id}', this)">
+        ${asistio ? "✅" : "❌"}
+      </td>
     `;
+
+    if (asistio) fila.classList.add("asistio");
 
     tbody.appendChild(fila);
   }
 }
-
-crearTabla();
 
 // =======================
 // ESCANER
 // =======================
 
 function onScanSuccess(decodedText) {
+  const id = decodedText.trim();
 
-  let id = decodedText.trim();
+  if (!estudiantes[id]) { alert("❌ ID no válido"); return; }
+  if (!fechaActiva) { alert("Selecciona una fecha"); return; }
 
-  if (!estudiantes[id]) {
-    alert("❌ ID no válido");
+  if (!asistenciaPorFecha[fechaActiva]) asistenciaPorFecha[fechaActiva] = {};
+
+  if (asistenciaPorFecha[fechaActiva][id]) {
+    alert("⚠️ Ya registrado");
     return;
   }
 
-  let fechaInput = document.getElementById("fecha").value;
-  let hoy = new Date().toISOString().split("T")[0];
-
-  let fecha = fechaInput || hoy;
-
-  // evitar fechas pasadas
-  if (fecha < hoy) {
-    alert("⚠️ No puedes registrar asistencia en fechas pasadas");
-    return;
-  }
-
-  if (asistencia.some(a => a.id === id && a.fecha === fecha)) {
-    alert("⚠️ Ya registrado en esta fecha");
-    return;
-  }
-
-  asistencia.push({
-    id,
-    ...estudiantes[id],
-    fecha,
-    hora: new Date().toLocaleTimeString()
-  });
-
-  let fila = document.querySelector(`tr[data-id="${id}"]`);
-  let estado = fila.querySelector(".estado");
-
-  estado.innerText = "✅";
-  estado.setAttribute("data-fecha", fecha);
-
-  fila.classList.add("asistio");
-
+  asistenciaPorFecha[fechaActiva][id] = true;
+  guardarAsistencia();
+  actualizarTabla();
   alert("✅ Asistencia registrada");
 }
 
@@ -134,35 +93,17 @@ let scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
 scanner.render(onScanSuccess);
 
 // =======================
-// ELIMINAR (DOBLE CLICK)
+// TOGGLE ASISTENCIA DOBLE CLICK
 // =======================
 
-function eliminarAsistencia(id, celda) {
+function toggleAsistencia(id, celda) {
+  if (!fechaActiva) return alert("Selecciona una fecha");
 
-  let fecha = celda.getAttribute("data-fecha");
+  const asistio = asistenciaPorFecha[fechaActiva]?.[id] || false;
+  asistenciaPorFecha[fechaActiva][id] = !asistio;
 
-  if (!fecha) {
-    alert("No hay asistencia registrada aquí");
-    return;
-  }
-
-  let confirmacion = confirm(
-    `⚠️ ¿Eliminar asistencia de este estudiante en la fecha ${fecha}?`
-  );
-
-  if (!confirmacion) return;
-
-  // eliminar del array
-  asistencia = asistencia.filter(a => !(a.id === id && a.fecha === fecha));
-
-  // reset visual
-  celda.innerText = "❌";
-  celda.removeAttribute("data-fecha");
-
-  let fila = document.querySelector(`tr[data-id="${id}"]`);
-  fila.classList.remove("asistio");
-
-  alert("🗑 Asistencia eliminada. Puedes volver a registrarla.");
+  guardarAsistencia();
+  actualizarTabla();
 }
 
 // =======================
@@ -170,20 +111,14 @@ function eliminarAsistencia(id, celda) {
 // =======================
 
 function eliminarPorFecha() {
+  if (!fechaActiva) { alert("Selecciona una fecha"); return; }
 
-  let fecha = document.getElementById("fecha").value;
-
-  if (!fecha) {
-    alert("Selecciona una fecha");
-    return;
-  }
-
-  let confirmacion = confirm("¿Seguro que quieres eliminar asistencia de esta fecha?");
-
+  const confirmacion = confirm(`⚠️ ¿Seguro que quieres eliminar toda la asistencia de ${fechaActiva}?`);
   if (!confirmacion) return;
 
-  asistencia = asistencia.filter(a => a.fecha !== fecha);
-
+  delete asistenciaPorFecha[fechaActiva];
+  guardarAsistencia();
+  actualizarTabla();
   alert("🗑 Eliminado correctamente");
 }
 
@@ -192,15 +127,37 @@ function eliminarPorFecha() {
 // =======================
 
 function exportar() {
+  if (!fechaActiva) { alert("Selecciona una fecha"); return; }
 
-  if (asistencia.length === 0) {
-    alert("No hay datos");
-    return;
+  const data = [];
+
+  for (let id in estudiantes) {
+    const asistio = asistenciaPorFecha[fechaActiva]?.[id] ? "Asistió" : "No asistió";
+    data.push({
+      ID: id,
+      Nombre: estudiantes[id].nombre,
+      Correo: estudiantes[id].correo,
+      Programa: estudiantes[id].programa,
+      Asistencia: asistio
+    });
   }
 
-  let ws = XLSX.utils.json_to_sheet(asistencia);
-  let wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Asistencia");
-
-  XLSX.writeFile(wb, "asistencia_general.xlsx");
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Asistencia " + fechaActiva);
+  XLSX.writeFile(wb, `asistencia_${fechaActiva}.xlsx`);
 }
+
+// =======================
+// GUARDAR LOCALSTORAGE
+// =======================
+
+function guardarAsistencia() {
+  localStorage.setItem("asistenciaPorFecha", JSON.stringify(asistenciaPorFecha));
+}
+
+// =======================
+// INICIAR TABLA
+// =======================
+
+actualizarTabla();
