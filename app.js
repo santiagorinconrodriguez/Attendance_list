@@ -10,22 +10,34 @@ let estudiantes = {
 };
 
 // Historial de asistencia por fecha
-let asistenciaPorFecha = {}; // { "2026-04-08": { "0000285118": "Asistió", ... } }
+let asistenciaPorFecha = {}; 
 
 // Fecha activa
 let fechaActiva = new Date().toISOString().split("T")[0];
 document.getElementById("fecha").value = fechaActiva;
 
+// Crear la fecha automáticamente al iniciar
+if (!asistenciaPorFecha[fechaActiva]) {
+  asistenciaPorFecha[fechaActiva] = {};
+}
+
 // =======================
 // FUNCIONES DE FECHA
 // =======================
 
+// Cambiar fecha desde el input
 document.getElementById("fecha").addEventListener("change", e => {
   fechaActiva = e.target.value;
+
+  if (!asistenciaPorFecha[fechaActiva]) {
+    asistenciaPorFecha[fechaActiva] = {};
+  }
+
   actualizarTabla();
+  alert(`📅 Fecha ${fechaActiva} seleccionada y lista para registrar asistencia`);
 });
 
-// Cambiar la fecha activa (con confirmación)
+// Cambiar la fecha manualmente (con confirmación)
 function modificarFecha() {
   const nuevaFecha = prompt("Ingrese la nueva fecha (YYYY-MM-DD):", fechaActiva);
   if (!nuevaFecha) return;
@@ -44,7 +56,7 @@ function modificarFecha() {
   alert(`📅 Fecha activa cambiada a ${fechaActiva}`);
 }
 
-// Borrar todas las asistencias de la fecha activa (con confirmación)
+// Borrar todas las asistencias de la fecha activa
 function borrarDatosFecha() {
   if (!fechaActiva) return alert("Selecciona una fecha");
 
@@ -68,14 +80,13 @@ function actualizarTabla() {
     const asistio = asistenciaPorFecha[fechaActiva]?.[id] || "No asistió";
 
     let fila = document.createElement("tr");
-    fila.setAttribute("data-id", id);
 
     fila.innerHTML = `
       <td>${id}</td>
       <td>${estudiantes[id].nombre}</td>
       <td>${estudiantes[id].correo}</td>
       <td>${estudiantes[id].programa}</td>
-      <td class="estado" ondblclick="toggleAsistencia('${id}', this)">
+      <td class="estado" onclick="toggleAsistencia('${id}')">
         ${asistio === "Asistió" ? "✅" : "❌"}
       </td>
     `;
@@ -91,10 +102,21 @@ function actualizarTabla() {
 
 function onScanSuccess(decodedText) {
   const id = decodedText.trim();
-  if (!estudiantes[id]) { alert("❌ ID no válido"); return; }
-  if (!fechaActiva) { alert("Selecciona una fecha"); return; }
 
-  if (!asistenciaPorFecha[fechaActiva]) asistenciaPorFecha[fechaActiva] = {};
+  if (!estudiantes[id]) {
+    alert("❌ ID no válido");
+    return;
+  }
+
+  if (!fechaActiva) {
+    alert("Selecciona una fecha");
+    return;
+  }
+
+  if (!asistenciaPorFecha[fechaActiva]) {
+    asistenciaPorFecha[fechaActiva] = {};
+  }
+
   asistenciaPorFecha[fechaActiva][id] = "Asistió";
 
   actualizarTabla();
@@ -105,13 +127,19 @@ let scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
 scanner.render(onScanSuccess);
 
 // =======================
-// DOBLE CLICK PARA TOGGLE
+// TOGGLE ASISTENCIA (CLICK)
 // =======================
 
-function toggleAsistencia(id, celda) {
-  if (!asistenciaPorFecha[fechaActiva]) asistenciaPorFecha[fechaActiva] = {};
+function toggleAsistencia(id) {
+  if (!asistenciaPorFecha[fechaActiva]) {
+    asistenciaPorFecha[fechaActiva] = {};
+  }
+
   const estadoActual = asistenciaPorFecha[fechaActiva][id] || "No asistió";
-  asistenciaPorFecha[fechaActiva][id] = estadoActual === "Asistió" ? "No asistió" : "Asistió";
+
+  asistenciaPorFecha[fechaActiva][id] =
+    estadoActual === "Asistió" ? "No asistió" : "Asistió";
+
   actualizarTabla();
 }
 
@@ -120,7 +148,10 @@ function toggleAsistencia(id, celda) {
 // =======================
 
 function exportar() {
-  if (!Object.keys(estudiantes).length) return alert("No hay estudiantes registrados");
+  if (!Object.keys(estudiantes).length) {
+    alert("No hay estudiantes registrados");
+    return;
+  }
 
   const fechas = Object.keys(asistenciaPorFecha).sort();
   const data = [];
@@ -147,7 +178,7 @@ function exportar() {
 }
 
 // =======================
-// INICIALIZAR TABLA
+// INICIALIZAR
 // =======================
 
 actualizarTabla();

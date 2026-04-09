@@ -13,7 +13,6 @@
   <div class="fecha-container">
     <label>📅 Fecha de asistencia:</label>
     <input type="date" id="fecha">
-    <button onclick="agregarFecha()">➕ Nueva fecha</button>
   </div>
 
   <!-- ESCANER -->
@@ -21,6 +20,7 @@
 
   <!-- TABLA -->
   <h2>Lista de Estudiantes (Fecha seleccionada)</h2>
+
   <table id="tabla">
     <thead>
       <tr>
@@ -28,22 +28,24 @@
         <th>Nombre</th>
         <th>Correo</th>
         <th>Programa</th>
-        <th>Asistencia (doble click para cambiar)</th>
+        <th>Asistencia (click para cambiar)</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
-<!-- BOTONES -->
-<div class="botones">
-  <button onclick="exportar()">📊 Exportar Excel</button>
-  <button onclick="modificarFecha()">🖊 Modificar fecha</button>
-  <button onclick="borrarDatosFecha()">🗑 Borrar datos de la fecha</button>
-</div>
+  <!-- BOTONES -->
+  <div class="botones">
+    <button onclick="exportar()">📊 Exportar Excel</button>
+    <button onclick="modificarFecha()">🖊 Modificar fecha</button>
+    <button onclick="borrarDatosFecha()">🗑 Borrar datos de la fecha</button>
+  </div>
 
-
+  <!-- LIBRERÍAS -->
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  <!-- JS -->
   <script src="app.js"></script>
 
 </body>
