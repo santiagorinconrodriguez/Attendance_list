@@ -3,8 +3,8 @@
 // =======================
 
 let estudiantes = {
-  "0000379578": { nombre: "Luis Ramírez", correo: "luis@example.com", programa: "dfdf" },
-  "E00000000039637060F141": { nombre: "Nuevo Estudiante", correo: "", programa: "" }
+  "0000379578": { nombre: "kdjdjd", correo: "djdjd@gmail.com", programa: "dfdf" },
+  "E00000000039637060F141": { nombre: "Juan Camilo Sánchez Romero", correo: "", programa: "" }
 };
 
 // Historial de asistencia por fecha
