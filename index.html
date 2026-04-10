@@ -8,18 +8,22 @@
 <body>
 
   <h1>📋 Control de Asistencia</h1>
+<div id="login">
+  <input type="email" id="email" placeholder="Correo">
+  <input type="password" id="password" placeholder="Contraseña">
+  <button onclick="login()">Iniciar sesión</button>
+</div>
 
-  <!-- FECHA -->
+
   <div class="fecha-container">
     <label>📅 Fecha de asistencia:</label>
     <input type="date" id="fecha">
   </div>
 
-  <!-- ESCANER -->
+
   <div id="reader"></div>
 
-  <!-- TABLA -->
-  <h2>Lista de Estudiantes (Fecha seleccionada)</h2>
+  <h2>Lista de Estudiantes </h2>
 
   <table id="tabla">
     <thead>
@@ -34,19 +38,17 @@
     <tbody></tbody>
   </table>
 
-  <!-- BOTONES -->
+
   <div class="botones">
     <button onclick="exportar()">📊 Exportar Excel</button>
     <button onclick="modificarFecha()">🖊 Modificar fecha</button>
     <button onclick="borrarDatosFecha()">🗑 Borrar datos de la fecha</button>
   </div>
 
-  <!-- LIBRERÍAS -->
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script type="module" src="app.js"></script>
 
-  <!-- JS -->
-  <script src="app.js"></script>
 
 </body>
 </html>

@@ -46,7 +46,7 @@ th, td {
 }
 
 th {
-  background: #007bff;
+  background: rgb(0, 18, 156);
   color: white;
 }
 
@@ -63,7 +63,7 @@ th {
 
 /* FILA CON ASISTENCIA */
 .asistio {
-  background: #28a745;
+  background: rgb(0, 18, 156);
   color: white;
 }
 
@@ -75,7 +75,7 @@ th {
 button {
   padding: 12px 20px;
   border: none;
-  background: green;
+  background: rgb(0, 18, 156);
   color: white;
   border-radius: 8px;
   cursor: pointer;
@@ -83,5 +83,5 @@ button {
 }
 
 button:hover {
-  background: darkgreen;
+  background: rgb(13, 14, 13);
 }
