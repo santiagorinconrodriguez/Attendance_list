@@ -16,23 +16,25 @@ from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const auth = getAuth(app);
 
-function login() {
+window.login = function () {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("✅ Sesión iniciada");
+
       document.getElementById("login").style.display = "none";
       document.getElementById("app").style.display = "block";
+
       cargarDatos();
     })
     .catch((error) => {
       console.error(error);
       alert("❌ " + error.code);
     });
-}
-let estudiantes = {
+    
+}; estudiantes = {
   "0000285118": { nombre: "ARENAS SALTOS, MARIA JOSE", correo: "mariaaresal@unisabana.edu.co", programa: "ENFERMERIA" },
   "E00000000039637060F141": { nombre: "Juan Camilo Sánchez Romero", correo: "", programa: "" },
   "0000391700": { nombre: "AREVALO ROSALES, JERONIMO", correo: "jeronimoarro@unisabana.edu.co", programa: "ADMINISTRACION DE EMPRESAS" },
