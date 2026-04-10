@@ -16,6 +16,8 @@ from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const auth = getAuth(app);
 
+let scanner;
+
 window.login = function () {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -28,12 +30,15 @@ window.login = function () {
       document.getElementById("app").style.display = "block";
 
       cargarDatos();
+
+      // 🔥 iniciar scanner DESPUÉS del login
+      scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+      scanner.render(onScanSuccess);
     })
     .catch((error) => {
       console.error(error);
       alert("❌ " + error.code);
     });
-    
 }; estudiantes = {
   "0000285118": { nombre: "ARENAS SALTOS, MARIA JOSE", correo: "mariaaresal@unisabana.edu.co", programa: "ENFERMERIA" },
   "E00000000039637060F141": { nombre: "Juan Camilo Sánchez Romero", correo: "", programa: "" },
@@ -183,9 +188,6 @@ function onScanSuccess(decodedText) {
   actualizarTabla();
   alert("✅ Asistencia registrada");
 }
-
-let scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-scanner.render(onScanSuccess);
 
 function toggleAsistencia(id) {
   if (!asistenciaPorFecha[fechaActiva]) {
