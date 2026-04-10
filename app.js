@@ -23,13 +23,20 @@ function login() {
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("✅ Sesión iniciada");
+
+      // ocultar login
       document.getElementById("login").style.display = "none";
+
+      // mostrar app
+      document.getElementById("app").style.display = "block";
+
+      // cargar datos desde Firebase
+      cargarDatos();
     })
     .catch(() => {
       alert("❌ Error al iniciar sesión");
     });
 }
-
 
 let estudiantes = {
   "0000285118": { nombre: "ARENAS SALTOS, MARIA JOSE", correo: "mariaaresal@unisabana.edu.co", programa: "ENFERMERIA" },
@@ -240,4 +247,4 @@ async function cargarDatos() {
   actualizarTabla();
 }
 
-cargarDatos();
+

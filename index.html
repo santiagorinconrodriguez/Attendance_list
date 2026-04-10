@@ -15,11 +15,12 @@
 </div>
 
 
+<div id="app" style="display:none;">
+
   <div class="fecha-container">
     <label>📅 Fecha de asistencia:</label>
     <input type="date" id="fecha">
   </div>
-
 
   <div id="reader"></div>
 
@@ -38,17 +39,10 @@
     <tbody></tbody>
   </table>
 
-
   <div class="botones">
     <button onclick="exportar()">📊 Exportar Excel</button>
     <button onclick="modificarFecha()">🖊 Modificar fecha</button>
     <button onclick="borrarDatosFecha()">🗑 Borrar datos de la fecha</button>
   </div>
 
-  <script src="https://unpkg.com/html5-qrcode"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script type="module" src="app.js"></script>
-
-
-</body>
-</html>
+</div>
