@@ -17,27 +17,21 @@ from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 const auth = getAuth(app);
 
 function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("✅ Sesión iniciada");
-
-      // ocultar login
       document.getElementById("login").style.display = "none";
-
-      // mostrar app
       document.getElementById("app").style.display = "block";
-
-      // cargar datos desde Firebase
       cargarDatos();
     })
-    .catch(() => {
-      alert("❌ Error al iniciar sesión");
+    .catch((error) => {
+      console.error(error);
+      alert("❌ " + error.code);
     });
 }
-
 let estudiantes = {
   "0000285118": { nombre: "ARENAS SALTOS, MARIA JOSE", correo: "mariaaresal@unisabana.edu.co", programa: "ENFERMERIA" },
   "E00000000039637060F141": { nombre: "Juan Camilo Sánchez Romero", correo: "", programa: "" },
