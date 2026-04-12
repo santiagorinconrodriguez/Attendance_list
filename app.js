@@ -269,3 +269,4 @@ window.exportar = exportar;
 window.modificarFecha = modificarFecha;
 window.borrarDatosFecha = borrarDatosFecha;
 window.toggleAsistencia = toggleAsistencia;
+window.cargarDatos = cargarDatos; 
