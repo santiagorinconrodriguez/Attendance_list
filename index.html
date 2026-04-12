@@ -2,22 +2,26 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Asistencia QR</title>
-  <link rel="stylesheet" href="style.css">
 
- 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+  <link rel="stylesheet" href="./style.css">
 
 
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#0b2e4a">
 
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
 </head>
+
 <body>
 
   <h1>Control de Asistencia</h1>
+
 
   <div id="login">
     <input type="email" id="email" placeholder="Correo">
@@ -34,7 +38,7 @@
 
     <div id="reader"></div>
 
-    <h2>Lista de Estudiantes </h2>
+    <h2>Lista de Estudiantes</h2>
 
     <table id="tabla">
       <thead>
@@ -43,7 +47,7 @@
           <th>Nombre</th>
           <th>Correo</th>
           <th>Programa</th>
-          <th>Asistencia (click para cambiar)</th>
+          <th>Asistencia</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -52,17 +56,27 @@
     <div class="botones">
       <button onclick="exportar()">📊 Exportar Excel</button>
       <button onclick="modificarFecha()">🖊 Modificar fecha</button>
-      <button onclick="borrarDatosFecha()">🗑 Borrar datos de la fecha</button>
+      <button onclick="borrarDatosFecha()">🗑 Borrar datos</button>
     </div>
 
   </div>
 
 
-  <script type="module" src="app.js"></script>
+  <script type="module" src="./app.js"></script>
+
+
   <script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-  }
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+          .then((reg) => {
+            console.log("✅ Service Worker activo:", reg.scope);
+          })
+          .catch((err) => {
+            console.error("❌ Error SW:", err);
+          });
+      });
+    }
   </script>
 
 </body>
