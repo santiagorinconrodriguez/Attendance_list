@@ -2,13 +2,21 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDatabase, ref, set, get, child } 
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+
+import { initializeApp } from "firebase/app";
+
 const firebaseConfig = {
-  databaseURL: "https://asistencia-qr-8f6ee-default-rtdb.firebaseio.com/"
+  apiKey: "AIzaSyARUmyWKj2bhzqKuJqb_do6VUz0mvbF9_U",
+  authDomain: "asistencia-qr-8f6ee.firebaseapp.com",
+  databaseURL: "https://asistencia-qr-8f6ee-default-rtdb.firebaseio.com",
+  projectId: "asistencia-qr-8f6ee",
+  storageBucket: "asistencia-qr-8f6ee.firebasestorage.app",
+  messagingSenderId: "129898951834",
+  appId: "1:129898951834:web:2ac46920a01f653dfadb23"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 
 
 import { getAuth, signInWithEmailAndPassword } 
