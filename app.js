@@ -23,28 +23,29 @@ const auth = getAuth(app);
 
 let scanner;
 
-window.login = function () {
+window.login = async function () {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("✅ Sesión iniciada");
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
 
-      document.getElementById("login").style.display = "none";
-      document.getElementById("app").style.display = "block";
+    alert("✅ Sesión iniciada");
 
-      // cargarDatos();
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
 
+    // 🔥 AHORA SÍ LLAMAMOS BIEN
+    await cargarDatos();
 
-      scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-      scanner.render(onScanSuccess);
-    })
-    .catch((error) => {
-      console.error(error);
-      alert("❌ " + error.message);
-    });
-}; 
+    scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    scanner.render(onScanSuccess);
+
+  } catch (error) {
+    console.error("ERROR REAL:", error);
+    alert("❌ " + (error?.message || "Error desconocido"));
+  }
+};
 
 let estudiantes = {
   "0000285118": { nombre: "ARENAS SALTOS, MARIA JOSE", correo: "mariaaresal@unisabana.edu.co", programa: "ENFERMERIA" },
@@ -253,17 +254,22 @@ async function exportar() {
   XLSX.writeFile(wb, "asistencia_global.xlsx");
 }
 
-// await cargarDatos();
+
 async function cargarDatos() {
-  const snapshot = await get(ref(db, "asistencia"));
+  try {
+    const snapshot = await get(ref(db, "asistencia"));
 
-  if (snapshot.exists()) {
-    asistenciaPorFecha = snapshot.val();
-  } else {
-    asistenciaPorFecha = {};
+    if (snapshot.exists()) {
+      asistenciaPorFecha = snapshot.val();
+    } else {
+      asistenciaPorFecha = {};
+    }
+
+    actualizarTabla();
+
+  } catch (error) {
+    console.error("Error cargando datos:", error);
   }
-
-  actualizarTabla();
 }
 
 window.exportar = exportar;
