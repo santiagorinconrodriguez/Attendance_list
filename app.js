@@ -253,6 +253,18 @@ async function exportar() {
   XLSX.writeFile(wb, "asistencia_global.xlsx");
 }
 
+async function cargarDatos() {
+  const snapshot = await get(ref(db, "asistencia"));
+
+  if (snapshot.exists()) {
+    asistenciaPorFecha = snapshot.val();
+  } else {
+    asistenciaPorFecha = {};
+  }
+
+  actualizarTabla();
+}
+
 window.exportar = exportar;
 window.modificarFecha = modificarFecha;
 window.borrarDatosFecha = borrarDatosFecha;
