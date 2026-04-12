@@ -4,45 +4,57 @@
   <meta charset="UTF-8">
   <title>Asistencia QR</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Librería QR -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <!-- Librería Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
-  <h1>📋 Control de Asistencal</h1>
-<div id="login">
-  <input type="email" id="email" placeholder="Correo">
-  <input type="password" id="password" placeholder="Contraseña">
-  <button onclick="login()">Iniciar sesión</button>
-</div>
+  <h1>📋 Control de Asistencial</h1>
 
-
-<div id="app" style="display:none;">
-
-  <div class="fecha-container">
-    <label>📅 Fecha de asistencia:</label>
-    <input type="date" id="fecha">
+  <div id="login">
+    <input type="email" id="email" placeholder="Correo">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="login()">Iniciar sesión</button>
   </div>
 
-  <div id="reader"></div>
+  <div id="app" style="display:none;">
 
-  <h2>Lista de Estudiantes </h2>
+    <div class="fecha-container">
+      <label>📅 Fecha de asistencia:</label>
+      <input type="date" id="fecha">
+    </div>
 
-  <table id="tabla">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Correo</th>
-        <th>Programa</th>
-        <th>Asistencia (click para cambiar)</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <div id="reader"></div>
 
-  <div class="botones">
-    <button onclick="exportar()">📊 Exportar Excel</button>
-    <button onclick="modificarFecha()">🖊 Modificar fecha</button>
-    <button onclick="borrarDatosFecha()">🗑 Borrar datos de la fecha</button>
+    <h2>Lista de Estudiantes </h2>
+
+    <table id="tabla">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Programa</th>
+          <th>Asistencia (click para cambiar)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="botones">
+      <button onclick="exportar()">📊 Exportar Excel</button>
+      <button onclick="modificarFecha()">🖊 Modificar fecha</button>
+      <button onclick="borrarDatosFecha()">🗑 Borrar datos de la fecha</button>
+    </div>
+
   </div>
 
-</div>
+  <!-- 🔥 AQUÍ ESTÁ EL SCRIPT 🔥 -->
+  <script type="module" src="app.js"></script>
+
+</body>
+</html>
