@@ -1,7 +1,8 @@
 {
   "name": "Asistencia QR",
   "short_name": "Asistencia",
-  "start_url": "/index.html",
+  "start_url": "./",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0b2e4a",
   "theme_color": "#0b2e4a",
