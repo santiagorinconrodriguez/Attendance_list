@@ -95,32 +95,6 @@ let estudiantes = {
 
 
 let asistenciaPorFecha = {}; 
-
-let fechaActiva = new Date().toISOString().split("T")[0];
-document.getElementById("fecha").value = fechaActiva;
-
-if (!asistenciaPorFecha[fechaActiva]) {
-  asistenciaPorFecha[fechaActiva] = {};
-}
-
-document.getElementById("fecha").addEventListener("change", e => {
-  fechaActiva = e.target.value;
-
-  if (!asistenciaPorFecha[fechaActiva]) {
-    asistenciaPorFecha[fechaActiva] = {};
-  }
-
-  actualizarTabla();
-  alert(`📅 Fecha ${fechaActiva} seleccionada y lista para registrar asistencia`);
-});
-
-function modificarFecha() {
-  const nuevaFecha = prompt("Ingrese la nueva fecha (YYYY-MM-DD):", fechaActiva);
-  if (!nuevaFecha) return;
-
-  const confirmacion = confirm(`⚠️ ¿Desea cambiar la fecha activa de ${fechaActiva} a ${nuevaFecha}?`);
-  if (!confirmacion) return;
-
 let fechaActiva;
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -139,8 +113,20 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     actualizarTabla();
+    alert(`📅 Fecha ${fechaActiva} seleccionada`);
   });
 });
+
+
+function modificarFecha() {
+  const nuevaFecha = prompt("Ingrese la nueva fecha (YYYY-MM-DD):", fechaActiva);
+  if (!nuevaFecha) return;
+
+  const confirmacion = confirm(`⚠️ ¿Desea cambiar la fecha activa de ${fechaActiva} a ${nuevaFecha}?`);
+  if (!confirmacion) return;
+
+  fechaActiva = nuevaFecha;
+  document.getElementById("fecha").value = fechaActiva;
 
   if (!asistenciaPorFecha[fechaActiva]) {
     asistenciaPorFecha[fechaActiva] = {};
@@ -157,6 +143,10 @@ function borrarDatosFecha() {
   if (!confirmacion) return;
 
   asistenciaPorFecha[fechaActiva] = {};
+
+
+  set(ref(db, "asistencia/" + fechaActiva), asistenciaPorFecha[fechaActiva]);
+
   actualizarTabla();
   alert("🗑 Todas las asistencias de esta fecha han sido borradas");
 }
@@ -262,7 +252,6 @@ async function exportar() {
   XLSX.utils.book_append_sheet(wb, ws, "Asistencia");
   XLSX.writeFile(wb, "asistencia_global.xlsx");
 }
-
 
 window.exportar = exportar;
 window.modificarFecha = modificarFecha;
