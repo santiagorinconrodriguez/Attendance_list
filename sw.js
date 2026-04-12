@@ -1,11 +1,12 @@
 const CACHE_NAME = "asistencia-v1";
 
 const urlsToCache = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./app.js",
-  "./manifest.json"
+  "/Attendance_list/",
+  "/Attendance_list/index.html",
+  "/Attendance_list/style.css",
+  "/Attendance_list/app.js",
+  "/Attendance_list/manifest.json",
+  "/Attendance_list/icono.png"
 ];
 
 

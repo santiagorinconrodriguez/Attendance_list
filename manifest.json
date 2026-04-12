@@ -1,19 +1,19 @@
 {
   "name": "Asistencia QR",
   "short_name": "Asistencia",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/Attendance_list/",
+  "scope": "/Attendance_list/",
   "display": "standalone",
   "background_color": "#0b2e4a",
   "theme_color": "#0b2e4a",
   "icons": [
     {
-      "src": "./icono.png",
+      "src": "/Attendance_list/icono.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./icono.png",
+      "src": "/Attendance_list/icono.png",
       "sizes": "512x512",
       "type": "image/png"
     }
