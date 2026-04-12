@@ -287,6 +287,31 @@ async function cargarDatos() {
   }
 }
 
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+    document.getElementById("installModal").style.display = "flex";
+  }
+});
+
+document.getElementById("installBtn").addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+
+  const choice = await deferredPrompt.userChoice;
+
+  console.log("Resultado instalación:", choice.outcome);
+
+  deferredPrompt = null;
+
+  document.getElementById("installModal").style.display = "none";
+});
+
 window.exportar = exportar;
 window.modificarFecha = modificarFecha;
 window.borrarDatosFecha = borrarDatosFecha;
