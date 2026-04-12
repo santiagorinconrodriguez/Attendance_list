@@ -10,10 +10,14 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b2e4a">
+
 </head>
 <body>
 
-  <h1>📋 Control de Asistencial.-</h1>
+  <h1>Control de Asistencia</h1>
 
   <div id="login">
     <input type="email" id="email" placeholder="Correo">
@@ -55,6 +59,11 @@
 
 
   <script type="module" src="app.js"></script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+  </script>
 
 </body>
 </html>
