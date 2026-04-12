@@ -42,7 +42,7 @@ window.login = function () {
     })
     .catch((error) => {
       console.error(error);
-      alert("❌ " + error.code);
+      alert("❌ " + error.message);
     });
 }; 
 
