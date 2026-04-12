@@ -36,7 +36,7 @@ window.login = function () {
 
       cargarDatos();
 
-      // 🔥 iniciar scanner DESPUÉS del login
+
       scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
       scanner.render(onScanSuccess);
     })
@@ -202,10 +202,20 @@ function toggleAsistencia(id) {
   asistenciaPorFecha[fechaActiva][id] =
     estadoActual === "Asistió" ? "No asistió" : "Asistió";
 
+  set(ref(db, "asistencia/" + fechaActiva), asistenciaPorFecha[fechaActiva]);
+
   actualizarTabla();
 }
 
-function exportar() {
+async function exportar() {
+  const snapshot = await get(ref(db, "asistencia"));
+
+  if (snapshot.exists()) {
+    asistenciaPorFecha = snapshot.val();
+  } else {
+    asistenciaPorFecha = {};
+  }
+
   if (!Object.keys(estudiantes).length) {
     alert("No hay estudiantes registrados");
     return;
@@ -235,19 +245,7 @@ function exportar() {
   XLSX.writeFile(wb, "asistencia_global.xlsx");
 }
 
-async function cargarDatos() {
-  const snapshot = await get(ref(db, "asistencia"));
-  
-  if (snapshot.exists()) {
-    asistenciaPorFecha = snapshot.val();
-  } else {
-    asistenciaPorFecha = {};
-  }
 
-  actualizarTabla();
-}
-
-/* 🔥 CLAVE PARA QUE FUNCIONEN LOS BOTONES 🔥 */
 window.exportar = exportar;
 window.modificarFecha = modificarFecha;
 window.borrarDatosFecha = borrarDatosFecha;
