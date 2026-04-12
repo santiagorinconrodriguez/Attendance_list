@@ -156,22 +156,37 @@ function actualizarTabla() {
   const tbody = document.querySelector("#tabla tbody");
   tbody.innerHTML = "";
 
+  if (!estudiantes || Object.keys(estudiantes).length === 0) {
+    console.error("⚠️ No hay estudiantes cargados");
+    return;
+  }
+
   for (let id in estudiantes) {
-    const asistio = asistenciaPorFecha[fechaActiva]?.[id] || "No asistió";
+    const estudiante = estudiantes[id];
+
+    let asistio = "No asistió";
+
+    if (
+      asistenciaPorFecha[fechaActiva] &&
+      asistenciaPorFecha[fechaActiva][id] === "Asistió"
+    ) {
+      asistio = "Asistió";
+    }
 
     let fila = document.createElement("tr");
 
     fila.innerHTML = `
       <td>${id}</td>
-      <td>${estudiantes[id].nombre}</td>
-      <td>${estudiantes[id].correo}</td>
-      <td>${estudiantes[id].programa}</td>
+      <td>${estudiante.nombre || "Sin nombre"}</td>
+      <td>${estudiante.correo || "-"}</td>
+      <td>${estudiante.programa || "-"}</td>
       <td class="estado" onclick="toggleAsistencia('${id}')">
         ${asistio === "Asistió" ? "✅" : "❌"}
       </td>
     `;
 
     if (asistio === "Asistió") fila.classList.add("asistio");
+
     tbody.appendChild(fila);
   }
 }
