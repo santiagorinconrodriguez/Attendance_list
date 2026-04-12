@@ -121,8 +121,26 @@ function modificarFecha() {
   const confirmacion = confirm(`⚠️ ¿Desea cambiar la fecha activa de ${fechaActiva} a ${nuevaFecha}?`);
   if (!confirmacion) return;
 
-  fechaActiva = nuevaFecha;
+let fechaActiva;
+
+window.addEventListener("DOMContentLoaded", () => {
+  fechaActiva = new Date().toISOString().split("T")[0];
   document.getElementById("fecha").value = fechaActiva;
+
+  if (!asistenciaPorFecha[fechaActiva]) {
+    asistenciaPorFecha[fechaActiva] = {};
+  }
+
+  document.getElementById("fecha").addEventListener("change", e => {
+    fechaActiva = e.target.value;
+
+    if (!asistenciaPorFecha[fechaActiva]) {
+      asistenciaPorFecha[fechaActiva] = {};
+    }
+
+    actualizarTabla();
+  });
+});
 
   if (!asistenciaPorFecha[fechaActiva]) {
     asistenciaPorFecha[fechaActiva] = {};
