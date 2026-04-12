@@ -34,7 +34,7 @@ window.login = function () {
       document.getElementById("login").style.display = "none";
       document.getElementById("app").style.display = "block";
 
-      cargarDatos();
+      // cargarDatos();
 
 
       scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
@@ -253,6 +253,7 @@ async function exportar() {
   XLSX.writeFile(wb, "asistencia_global.xlsx");
 }
 
+// await cargarDatos();
 async function cargarDatos() {
   const snapshot = await get(ref(db, "asistencia"));
 
