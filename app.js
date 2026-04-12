@@ -96,10 +96,8 @@ let estudiantes = {
 
 let asistenciaPorFecha = {}; 
 
-
 let fechaActiva = new Date().toISOString().split("T")[0];
 document.getElementById("fecha").value = fechaActiva;
-
 
 if (!asistenciaPorFecha[fechaActiva]) {
   asistenciaPorFecha[fechaActiva] = {};
@@ -115,7 +113,6 @@ document.getElementById("fecha").addEventListener("change", e => {
   actualizarTabla();
   alert(`📅 Fecha ${fechaActiva} seleccionada y lista para registrar asistencia`);
 });
-
 
 function modificarFecha() {
   const nuevaFecha = prompt("Ingrese la nueva fecha (YYYY-MM-DD):", fechaActiva);
@@ -134,7 +131,6 @@ function modificarFecha() {
   actualizarTabla();
   alert(`📅 Fecha activa cambiada a ${fechaActiva}`);
 }
-
 
 function borrarDatosFecha() {
   if (!fechaActiva) return alert("Selecciona una fecha");
@@ -209,7 +205,6 @@ function toggleAsistencia(id) {
   actualizarTabla();
 }
 
-
 function exportar() {
   if (!Object.keys(estudiantes).length) {
     alert("No hay estudiantes registrados");
@@ -252,4 +247,8 @@ async function cargarDatos() {
   actualizarTabla();
 }
 
-
+/* 🔥 CLAVE PARA QUE FUNCIONEN LOS BOTONES 🔥 */
+window.exportar = exportar;
+window.modificarFecha = modificarFecha;
+window.borrarDatosFecha = borrarDatosFecha;
+window.toggleAsistencia = toggleAsistencia;
