@@ -1,4 +1,4 @@
-const CACHE_NAME = "asistencia-v2";
+const CACHE_NAME = "asistencia-v3";
 
 const urlsToCache = [
   "/Attendance_list/",
