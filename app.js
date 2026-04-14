@@ -35,7 +35,6 @@ window.login = async function () {
     document.getElementById("login").style.display = "none";
     document.getElementById("app").style.display = "block";
 
-    // 🔥 AHORA SÍ LLAMAMOS BIEN
     await cargarDatos();
 
     scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
@@ -49,7 +48,6 @@ window.login = async function () {
 
 let estudiantes = {
   "0000285118": { nombre: "ARENAS SALTOS, MARIA JOSE", correo: "mariaaresal@unisabana.edu.co", programa: "ENFERMERIA" },
-  "E00000000039637060F141": { nombre: "Juan Camilo Sánchez Romero", correo: "", programa: "" },
   "0000391700": { nombre: "AREVALO ROSALES, JERONIMO", correo: "jeronimoarro@unisabana.edu.co", programa: "ADMINISTRACION DE EMPRESAS" },
   "0000379578": { nombre: "BARON RAMIREZ, ANDRES FELIPE", correo: "andresbabu@unisabana.edu.co", programa: "ADMON NEGOCIOS INTERNACIONALES" },
   "0000313245": { nombre: "BECHARA HERNANDEZ, ARTURO TOMAS", correo: "arturobe@unisabana.edu.co", programa: "ADMON DE MERCADEO Y LOGIST INT" },
